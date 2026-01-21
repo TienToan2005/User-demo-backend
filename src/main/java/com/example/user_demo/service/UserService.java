@@ -4,7 +4,9 @@ import com.example.user_demo.dto.request.UserRequest;
 import com.example.user_demo.dto.response.PageResponse;
 import com.example.user_demo.dto.response.UserResponse;
 import com.example.user_demo.entity.User;
+import com.example.user_demo.enums.ErrorCode;
 import com.example.user_demo.enums.UserStatus;
+import com.example.user_demo.exception.AppException;
 import com.example.user_demo.repository.UserRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -35,7 +37,7 @@ public class UserService {
 
     public UserResponse create(UserRequest request){
         if (userRepository.existsByEmail(request.email())){
-            throw new ResponseStatusException(HttpStatus.CONFLICT);
+            throw new AppException(ErrorCode.EMAIL_EXISTED);
         }
         User user = new User();
         user.setEmail(request.email().trim().toLowerCase());
@@ -46,7 +48,7 @@ public class UserService {
     }
     public UserResponse getById(Long id){
         User user = userRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,"User not found!"));
+                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
 
         return toUserResponse(user);
 
@@ -67,7 +69,7 @@ public class UserService {
 
     public UserResponse update(Long id, UserRequest request){
         User user = userRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,"User not found!"));
+                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
 
         user.setEmail(request.email().trim().toLowerCase());
         user.setFullName(request.fullName().trim());
@@ -77,7 +79,7 @@ public class UserService {
     }
     public void delete(Long id){
         User user = userRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
+                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
 
         userRepository.delete(user);
     }
