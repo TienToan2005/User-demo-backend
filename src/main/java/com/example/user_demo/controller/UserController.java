@@ -26,7 +26,7 @@ public class UserController {
     public ResponseEntity<ApiResponse<UserResponse>> create(@RequestBody @Valid UserRequest request){
         UserResponse user =  userService.create(request);
         return ResponseEntity.status(201).body(ApiResponse.<UserResponse>builder()
-                .code(1000)
+                .code(0)
                 .result(user)
                 .message("success")
                 .build());
@@ -35,6 +35,8 @@ public class UserController {
     public ApiResponse<UserResponse> getById(@PathVariable Long id){
         UserResponse user = userService.getById(id);
         return ApiResponse.<UserResponse>builder()
+                .code(0)
+                .message("success")
                 .result(user)
                 .build();
     }
@@ -46,6 +48,7 @@ public class UserController {
     ) {
         PageResponse<UserResponse> response = userService.getUsers(keyword, status, pageable);
         return ApiResponse.<PageResponse<UserResponse>>builder()
+                .code(0)
                 .message("success")
                 .result(response)
                 .build();
@@ -54,6 +57,8 @@ public class UserController {
     public ApiResponse<UserResponse> update(@PathVariable Long id ,@RequestBody @Valid UserRequest request){
         UserResponse userResponse =  userService.update(id, request);
         return ApiResponse.<UserResponse>builder()
+                .code(0)
+                .message("success")
                 .result(userResponse)
                 .build();
     }

@@ -1,7 +1,9 @@
 package com.example.user_demo.entity;
 
+import com.example.user_demo.enums.RoleUser;
 import com.example.user_demo.enums.UserStatus;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 @Entity
@@ -13,8 +15,13 @@ public class User {
 
     @Column(nullable = false,unique = true)
     private String email;
+
     private String fullName;
 
+    @Column(nullable = false)
+    private String password;
     @Enumerated(EnumType.STRING)
     private UserStatus status;
+    @Enumerated(EnumType.STRING)
+    private RoleUser role;
 }

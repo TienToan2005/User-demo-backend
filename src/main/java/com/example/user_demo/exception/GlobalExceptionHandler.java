@@ -37,7 +37,7 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(ErrorCode.BAD_REQUEST.getHttpStatus())
                 .body(ApiResponse.<Void>builder()
                     .code(ErrorCode.BAD_REQUEST.getCode())
-                    .message("Invalid '" + exception.getValue() + "for parameter " + exception.getName() + "'")
+                    .message("Invalid '" + exception.getValue() + "' for parameter '" + exception.getName() + "'")
                     .build()
         );
     }
