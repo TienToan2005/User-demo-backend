@@ -5,6 +5,7 @@ import com.example.user_demo.dto.response.PageResponse;
 import com.example.user_demo.dto.response.UserResponse;
 import com.example.user_demo.entity.User;
 import com.example.user_demo.enums.ErrorCode;
+import com.example.user_demo.enums.RoleUser;
 import com.example.user_demo.enums.UserStatus;
 import com.example.user_demo.exception.AppException;
 import com.example.user_demo.repository.UserRepository;
@@ -25,27 +26,24 @@ public class UserService {
         String email = user.getEmail();
         String fullName = user.getFullName();
         UserStatus status = user.getStatus();
-        return new UserResponse(id,email,fullName,status);
+        RoleUser role = user.getRole();
+        return new UserResponse(id,email,fullName,status,role);
     }
 
-    public UserResponse create(UserRequest request){
-        String email = request.email().trim().toLowerCase();
-        String fullname = request.fullName().trim();
-        if (userRepository.existsByEmail(email)){
-            throw new AppException(ErrorCode.EMAIL_EXISTED);
-        }
-        User user = new User();
-        user.setEmail(email);
-        user.setFullName(fullname);
-        user.setStatus(UserStatus.ACTIVE);
-        User savedUser = userRepository.save(user);
-        return toUserResponse(savedUser);
-    }
     public UserResponse getById(Long id){
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
-        if(user.getStatus() == UserStatus.DELETED){
-            throw new AppException(ErrorCode.USER_NOT_FOUND);
+        if(user.getStatus() != UserStatus.ACTIVE){
+            throw new AppException(ErrorCode.FORBIDDEN);
+        }
+        return toUserResponse(user);
+
+    }
+    public UserResponse getByEmail(String email){
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
+        if(user.getStatus() != UserStatus.ACTIVE){
+            throw new AppException(ErrorCode.FORBIDDEN);
         }
         return toUserResponse(user);
 

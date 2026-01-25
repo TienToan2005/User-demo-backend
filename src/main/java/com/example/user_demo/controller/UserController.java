@@ -5,11 +5,14 @@ import com.example.user_demo.dto.response.ApiResponse;
 import com.example.user_demo.dto.response.PageResponse;
 import com.example.user_demo.dto.response.UserResponse;
 import com.example.user_demo.enums.UserStatus;
+import com.example.user_demo.repository.UserRepository;
 import com.example.user_demo.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -22,14 +25,15 @@ public class UserController {
         this.userService = userService;
     }
 
-    @PostMapping
-    public ResponseEntity<ApiResponse<UserResponse>> create(@RequestBody @Valid UserRequest request){
-        UserResponse user =  userService.create(request);
-        return ResponseEntity.status(201).body(ApiResponse.<UserResponse>builder()
+    @GetMapping("/me")
+    public ApiResponse<UserResponse> getMe(){
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        UserResponse user = userService.getByEmail(email);
+        return ApiResponse.<UserResponse>builder()
                 .code(0)
                 .result(user)
                 .message("success")
-                .build());
+                .build();
     }
     @GetMapping("/{id}")
     public ApiResponse<UserResponse> getById(@PathVariable Long id){
@@ -62,6 +66,7 @@ public class UserController {
                 .result(userResponse)
                 .build();
     }
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(@PathVariable Long id){
         userService.delete(id);

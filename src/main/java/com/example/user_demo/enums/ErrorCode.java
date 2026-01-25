@@ -8,9 +8,9 @@ public enum ErrorCode {
     EMAIL_EXISTED(1002,HttpStatus.CONFLICT,"Email already exists"), //409
     BAD_REQUEST(1004,HttpStatus.BAD_REQUEST,"Bad request"),//400
     INTERNAL_ERROR(1005,HttpStatus.INTERNAL_SERVER_ERROR,"Internal server error"), //500
-    STATUS_FORBIDDEN(1006,HttpStatus.FORBIDDEN,"User is inactive"), //403
+    FORBIDDEN(1006,HttpStatus.FORBIDDEN,"Access denied"), //403
     INVALID_CREDENTIALS(1007,HttpStatus.BAD_REQUEST,"Invalid credentials"),
-    UNAUTHTHENTICATED(1008,HttpStatus.UNAUTHORIZED,"")
+    UNAUTHENTICATED(1008,HttpStatus.UNAUTHORIZED,"Unauthenticated") //401
     ;
 
     private final int code;

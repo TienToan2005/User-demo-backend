@@ -1,6 +1,7 @@
 package com.example.user_demo.dto.response;
 
 import lombok.Builder;
+import lombok.Getter;
 
 @Builder
 public record ApiResponse <T> (

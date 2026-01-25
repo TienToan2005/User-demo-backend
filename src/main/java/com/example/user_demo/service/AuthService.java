@@ -32,7 +32,7 @@ public class AuthService {
                 .orElseThrow(() -> new AppException(ErrorCode.INVALID_CREDENTIALS));
 
         if(user.getStatus() != UserStatus.ACTIVE){
-            throw new AppException(ErrorCode.STATUS_FORBIDDEN);
+            throw new AppException(ErrorCode.FORBIDDEN);
         }
         boolean matched = passwordEncoder.matches(request.password(), user.getPassword());
         if(!matched){
@@ -55,7 +55,7 @@ public class AuthService {
         User saved = userRepository.save(user);
 
         return new UserResponse(
-                saved.getId(), saved.getEmail(), saved.getFullName(), saved.getStatus()
+                saved.getId(), saved.getEmail(), saved.getFullName(), saved.getStatus() , saved.getRole()
         );
     }
 }
