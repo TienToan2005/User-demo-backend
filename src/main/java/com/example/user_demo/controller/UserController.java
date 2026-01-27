@@ -35,6 +35,7 @@ public class UserController {
                 .message("success")
                 .build();
     }
+    @PreAuthorize("hasRole('ADMIN') or #id == principal.id")
     @GetMapping("/{id}")
     public ApiResponse<UserResponse> getById(@PathVariable Long id){
         UserResponse user = userService.getById(id);
@@ -44,6 +45,7 @@ public class UserController {
                 .result(user)
                 .build();
     }
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping
     public ApiResponse<PageResponse<UserResponse>> getAll(
             @RequestParam(required = false) String keyword,
@@ -57,6 +59,7 @@ public class UserController {
                 .result(response)
                 .build();
     }
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}")
     public ApiResponse<UserResponse> update(@PathVariable Long id ,@RequestBody @Valid UserRequest request){
         UserResponse userResponse =  userService.update(id, request);

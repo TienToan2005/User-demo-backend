@@ -31,8 +31,6 @@ public class SecurityConfig {
                 // quyền truy cập
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/auth/**").permitAll()
-                        .requestMatchers(HttpMethod.GET,"/api/users").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.DELETE,"/api/users/**").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )
                 .exceptionHandling(e -> e.authenticationEntryPoint(entryPoint).accessDeniedHandler(deniedHandler))

@@ -10,7 +10,7 @@ public enum ErrorCode {
     INTERNAL_ERROR(1005,HttpStatus.INTERNAL_SERVER_ERROR,"Internal server error"), //500
     FORBIDDEN(1006,HttpStatus.FORBIDDEN,"Access denied"), //403
     INVALID_CREDENTIALS(1007,HttpStatus.BAD_REQUEST,"Invalid credentials"),
-    UNAUTHENTICATED(1008,HttpStatus.UNAUTHORIZED,"Unauthenticated") //401
+    UNAUTHENTICATED(1008,HttpStatus.UNAUTHORIZED,"Unauthenticated"), //401
     ;
 
     private final int code;
