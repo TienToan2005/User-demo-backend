@@ -75,7 +75,7 @@ public class AuthService {
         User saved = userRepository.save(user);
 
         return new UserResponse(
-                saved.getId(), saved.getEmail(), saved.getFullName(), saved.getStatus() , saved.getRole()
+                saved.getId(), saved.getEmail(), saved.getFullName(), saved.getStatus() , saved.getRole(),null
         );
     }
     public TokenResponse refresh(TokenRequest request){
