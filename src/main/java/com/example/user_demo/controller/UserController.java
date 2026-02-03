@@ -1,5 +1,6 @@
 package com.example.user_demo.controller;
 
+import com.example.user_demo.dto.request.UpdateUserRequest;
 import com.example.user_demo.dto.request.UserRequest;
 import com.example.user_demo.dto.response.ApiResponse;
 import com.example.user_demo.dto.response.PageResponse;
@@ -7,6 +8,7 @@ import com.example.user_demo.dto.response.UserResponse;
 import com.example.user_demo.enums.UserStatus;
 import com.example.user_demo.service.UserService;
 import jakarta.validation.Valid;
+import org.apache.tomcat.util.net.openssl.ciphers.Authentication;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
@@ -26,7 +28,7 @@ public class UserController {
     public ResponseEntity<ApiResponse<UserResponse>> create(@RequestBody @Valid UserRequest request){
         UserResponse user =  userService.create(request);
         return ResponseEntity.status(201).body(ApiResponse.<UserResponse>builder()
-                .code(1000)
+                .code(0)
                 .result(user)
                 .message("success")
                 .build());
@@ -55,6 +57,17 @@ public class UserController {
         UserResponse userResponse =  userService.update(id, request);
         return ApiResponse.<UserResponse>builder()
                 .result(userResponse)
+                .build();
+    }
+    @PatchMapping("/me")
+    public ApiResponse<UserResponse> updateMe(@RequestBody UpdateUserRequest request, Authentication authentication){
+        String email = authentication.name();
+        UserResponse user = userService.updateMe(email,request);
+
+        return ApiResponse.<UserResponse>builder()
+                .code(0)
+                .message("success")
+                .result(user)
                 .build();
     }
     @DeleteMapping("/{id}")
