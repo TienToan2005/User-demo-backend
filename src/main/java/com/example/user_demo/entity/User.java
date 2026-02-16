@@ -24,6 +24,6 @@ public class User extends BaseEnity {
     private UserStatus status;
     @Enumerated(EnumType.STRING)
     private RoleUser role;
-    @Column(nullable = false)
+    @Column(name = "avatar_url", nullable = true)
     private String avatarUrl;
 }
