@@ -10,5 +10,6 @@ public record UserResponse(
         String email,
         String fullName,
         UserStatus status,
-        RoleUser roleUser
+        RoleUser roleUser,
+        String avatarUrl
 ) { };

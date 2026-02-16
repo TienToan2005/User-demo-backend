@@ -10,10 +10,13 @@ import com.example.user_demo.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 
 @RestController
@@ -74,5 +77,16 @@ public class UserController {
     public ResponseEntity<?> delete(@PathVariable Long id){
         userService.delete(id);
         return ResponseEntity.noContent().build();
+    }
+    @PostMapping(value = "/me/avatar" , consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ApiResponse<UserResponse> uploadAvatar(@RequestPart("file") MultipartFile multipartFile){
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        UserResponse userResponse = userService.updateMyAvatar(email,multipartFile);
+
+        return ApiResponse.<UserResponse>builder()
+                .code(0)
+                .message("success")
+                .result(userResponse)
+                .build();
     }
 }
