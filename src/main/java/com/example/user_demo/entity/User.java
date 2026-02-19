@@ -3,11 +3,14 @@ package com.example.user_demo.entity;
 import com.example.user_demo.enums.RoleUser;
 import com.example.user_demo.enums.UserStatus;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
-import lombok.Data;
+import lombok.*;
 
+@Getter
+@Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
-@Data
 public class User extends BaseEnity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -1,13 +1,17 @@
 package com.example.user_demo.entity;
 
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.*;
 
 import java.time.Instant;
 
+@Getter
+@Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "refresh_tokens")
-@Data
 public class RefreshToken {
 
     @Id
