@@ -42,7 +42,7 @@ public class AuthServiceTest {
     @Mock private JwtService jwtService;
     @Mock private PasswordEncoder passwordEncoder;
     @Mock private RefreshTokenResponsitory refreshTokenResponsitory;
-
+    @Mock private UserService userService;
     private LoginRequest loginRequest;
     private RegisterRequest registerRequest;
     private User user;
@@ -88,36 +88,26 @@ public class AuthServiceTest {
 
     @Test
     void register_success() {
-        //GIVEN
-        when(userRepository.existsByEmail(anyString())).thenReturn(false);
-        when(userRepository.save(any())).thenReturn(user);
-        when(passwordEncoder.encode("123456")).thenReturn("hashed");
+        // GIVEN
+        when(userService.createUser(anyString(), anyString(), anyString()))
+                .thenReturn(user);
 
-        //WHEN
-        UserResponse userResponse = authService.register(registerRequest);
+        // WHEN
+        UserResponse res = authService.register(registerRequest);
 
-        //THEN
-        assertNotNull(userResponse);
-        assertEquals(5L, userResponse.id());
-        assertEquals("tientoan@gmail.com", userResponse.email());
-        assertEquals("Hoang Tien Toan", userResponse.fullName());
-        assertEquals(RoleUser.USER, userResponse.roleUser());
-        assertEquals(UserStatus.ACTIVE, userResponse.status());
-        verify(userRepository).existsByEmail("httoan@gmail.com");
-        verify(userRepository).save(any(User.class));
-        verify(passwordEncoder).encode("123456");
-        verifyNoMoreInteractions(userRepository,passwordEncoder);
-    }
-    @Test
-    void register_fail(){
-        //GIVE
-        when(userRepository.existsByEmail(anyString())).thenReturn(true);
+        // THEN (assert mapping)
+        assertNotNull(res);
+        assertEquals(5L, res.id());
+        assertEquals("tientoan@gmail.com", res.email());
+        assertEquals("Hoang Tien Toan", res.fullName());
+        assertEquals(RoleUser.USER, res.roleUser());
+        assertEquals(UserStatus.ACTIVE, res.status());
 
-        //WHEN
-        var exception = assertThrows(AppException.class,() -> authService.register(registerRequest));
+        // verify gọi đúng
+        verify(userService).createUser("httoan@gmail.com", "Hoang Tien Toan", "123456");
 
-        //THEN
-        Assertions.assertEquals(ErrorCode.EMAIL_EXISTED, exception.getErrorCode());
+        // và đảm bảo authService không đụng repo/encoder
+        verifyNoInteractions(userRepository, passwordEncoder);
     }
     @Test
     void login_success(){

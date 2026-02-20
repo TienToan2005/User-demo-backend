@@ -28,11 +28,13 @@ public class AuthService {
     private final RefreshTokenResponsitory refreshTokenResponsitory;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
-    public AuthService(UserRepository userRepository, RefreshTokenResponsitory refreshTokenResponsitory, PasswordEncoder passwordEncoder, JwtService jwtService) {
+    private final UserService userService;
+    public AuthService(UserRepository userRepository, RefreshTokenResponsitory refreshTokenResponsitory, PasswordEncoder passwordEncoder, JwtService jwtService, UserService userService) {
         this.userRepository = userRepository;
         this.refreshTokenResponsitory = refreshTokenResponsitory;
         this.passwordEncoder = passwordEncoder;
         this.jwtService = jwtService;
+        this.userService = userService;
     }
 
     public TokenResponse login(LoginRequest request){
@@ -61,21 +63,21 @@ public class AuthService {
         refreshTokenResponsitory.save(rt);
         return new TokenResponse(token,refreshtoken,jwtService.getExpirationSeconds());
     }
-    public UserResponse register(RegisterRequest request){
-        String email = request.email().trim().toLowerCase();
-        if(userRepository.existsByEmail(email)){
-                throw  new AppException(ErrorCode.EMAIL_EXISTED);
-        }
-        User user = new User();
-        user.setEmail(email);
-        user.setFullName(request.fullName());
-        user.setStatus(UserStatus.ACTIVE);
-        user.setRole(RoleUser.USER);
-        user.setPassword(passwordEncoder.encode(request.password()));
-        User saved = userRepository.save(user);
+    public UserResponse register(RegisterRequest request) {
+
+        User user = userService.createUser(
+                request.email(),
+                request.fullName(),
+                request.password()
+        );
 
         return new UserResponse(
-                saved.getId(), saved.getEmail(), saved.getFullName(), saved.getStatus() , saved.getRole(),null
+                user.getId(),
+                user.getEmail(),
+                user.getFullName(),
+                user.getStatus(),
+                user.getRole(),
+                user.getAvatarUrl()
         );
     }
     public TokenResponse refresh(TokenRequest request){
@@ -86,7 +88,7 @@ public class AuthService {
             throw new AppException(ErrorCode.INVALID_CREDENTIALS);
         }
         User user = rt.getUser();
-         // revoke token cu
+        // revoke token cu
         rt.setRevoked(true);
         refreshTokenResponsitory.save(rt);
 
