@@ -1,7 +1,7 @@
 package com.example.user_demo.mapper;
 
+import com.example.user_demo.dto.request.RegisterRequest;
 import com.example.user_demo.dto.request.UpdateUserRequest;
-import com.example.user_demo.dto.request.UserRequest;
 import com.example.user_demo.dto.response.UserResponse;
 import com.example.user_demo.entity.User;
 import org.mapstruct.*;
@@ -13,7 +13,7 @@ public interface UserMapper {
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "status", ignore = true)
-    User toEntity(UserRequest request);
+    User toEntity(RegisterRequest request);
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     @Mapping(target = "id", ignore = true)

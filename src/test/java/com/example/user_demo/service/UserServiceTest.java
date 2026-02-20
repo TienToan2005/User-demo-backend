@@ -53,7 +53,7 @@ public class UserServiceTest {
                 .email("tientoan@gmail.com")
                 .status(UserStatus.ACTIVE)
                 .fullName("Hoang Tien Toan")
-                .role(RoleUser.USER)
+                .roleUser(RoleUser.USER)
                 .password("hashed-pass")
                 .build();
         userRequest = UserRequest.builder()
@@ -85,7 +85,7 @@ public class UserServiceTest {
         assertEquals(5L,user.getId());
         assertEquals("tientoan@gmail.com", user.getEmail());
         assertEquals("Hoang Tien Toan", user.getFullName());
-        assertEquals(RoleUser.USER, user.getRole());
+        assertEquals(RoleUser.USER, user.getRoleUser());
         assertEquals(UserStatus.ACTIVE, user.getStatus());
         verify(userRepository).existsByEmail("httoan@gmail.com");
         verify(userRepository).save(any(User.class));
@@ -173,13 +173,13 @@ public class UserServiceTest {
 
         User u1 = User.builder()
                 .id(1L).email("a@gmail.com").fullName("A")
-                .status(UserStatus.ACTIVE).role(RoleUser.USER)
+                .status(UserStatus.ACTIVE).roleUser(RoleUser.USER)
                 .avatarUrl(null)
                 .build();
 
         User u2 = User.builder()
                 .id(2L).email("b@gmail.com").fullName("B")
-                .status(UserStatus.ACTIVE).role(RoleUser.ADMIN)
+                .status(UserStatus.ACTIVE).roleUser(RoleUser.ADMIN)
                 .avatarUrl("x.png")
                 .build();
 

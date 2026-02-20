@@ -65,7 +65,7 @@ public class AuthServiceTest {
                 .email("tientoan@gmail.com")
                 .status(UserStatus.ACTIVE)
                 .fullName("Hoang Tien Toan")
-                .role(RoleUser.USER)
+                .roleUser(RoleUser.USER)
                 .password("hashed-pass")
                 .build();
         UserResponse userResponse = UserResponse.builder()

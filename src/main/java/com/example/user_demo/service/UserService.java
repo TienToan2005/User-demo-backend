@@ -33,7 +33,7 @@ public class UserService {
         String email = user.getEmail();
         String fullName = user.getFullName();
         UserStatus status = user.getStatus();
-        RoleUser role = user.getRole();
+        RoleUser role = user.getRoleUser();
         String avatarUrl = user.getAvatarUrl();
         return new UserResponse(id,email,fullName,status,role,avatarUrl);
     }
@@ -48,7 +48,7 @@ public class UserService {
         user.setEmail(email);
         user.setFullName(fullName);
         user.setPassword(passwordEncoder.encode(rawPassword));
-        user.setRole(RoleUser.USER);
+        user.setRoleUser(RoleUser.USER);
         user.setStatus(UserStatus.ACTIVE);
 
         return userRepository.save(user);
